@@ -2,7 +2,7 @@ FROM fedora:latest
 #FROM registry.access.redhat.com/ubi8-init
 USER root
 
-LABEL maintainer="abeekhof@redhat.com"
+# LABEL maintainer="abeekhof@redhat.com"
 
 RUN dnf search kubernetes
 RUN dnf install -y pcs which passwd findutils bind-utils kubernetes-client gettext fence-agents-virsh fence-virt fence-agents-redfish iputils initscripts chkconfig nmap openssh-clients && rm -rf /var/cache/yum
@@ -28,7 +28,7 @@ EXPOSE 5410/udp
 EXPOSE 5411/udp
 EXPOSE 5412/udp
 
-ADD *.sh *.in /root/
+ADD *.sh /root/
 ADD k8sDeployment /usr/lib/ocf/resource.d/pacemaker
 
 CMD ["/usr/lib/systemd/systemd", "--system"]

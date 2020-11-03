@@ -60,8 +60,8 @@ if [ $REMOTE_NODE = 0 ]; then
 
     elif [ x${BOOTSTRAP_NODE} = x ]; then
 	pcs host auth ${NODE_ID} addr=${NODE_IP} -u hacluster -p ${CLUSTER_PASS}
-	#pcs --debug cluster setup ${CLUSTER_NAME} ${NODE_ID} --corosync_conf /etc/corosync/corosync.conf
-	envsubst < /root/corosync.conf.in > /etc/corosync/corosync.conf
+    pcs --debug cluster setup ${CLUSTER_NAME} ${NODE1NAME} addr=${NODE1ADDR} ${NODE2NAME} addr=${NODE2ADDR} --corosync_conf /etc/corosync/corosync.conf --force
+	# envsubst < /root/corosync.conf.in > /etc/corosync/corosync.conf
     
     else
 	pcs host auth ${NODE_ID} addr=${NODE_IP} -u hacluster -p ${CLUSTER_PASS}
