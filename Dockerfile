@@ -1,15 +1,13 @@
-FROM fedora:latest
+FROM fedora:32
 #FROM registry.access.redhat.com/ubi8-init
 USER root
 
 # LABEL maintainer="abeekhof@redhat.com"
 
-RUN dnf search kubernetes
-RUN dnf install -y pcs which passwd findutils bind-utils kubernetes-client gettext fence-agents-virsh fence-virt fence-agents-redfish iputils initscripts chkconfig nmap openssh-clients && rm -rf /var/cache/yum
+# RUN dnf search kubernetes
+RUN dnf install -y which passwd findutils bind-utils kubernetes-client gettext fence-agents-virsh fence-virt fence-agents-redfish iputils initscripts chkconfig nmap openssh-clients && rm -rf /var/cache/yum
 
 RUN mkdir -p /etc/systemd/system-preset/
-RUN echo 'enable pcsd.service' > /etc/systemd/system-preset/00-pcsd.preset
-RUN systemctl enable pcsd
 
 #RUN dnf install -y lsof && rm -rf /var/cache/yum
 
@@ -27,6 +25,11 @@ EXPOSE 5409/udp
 EXPOSE 5410/udp
 EXPOSE 5411/udp
 EXPOSE 5412/udp
+
+ADD *.rpm /root/
+RUN dnf install -y /root/*.rpm && rm -rf /var/cache/yum
+RUN echo 'enable pcsd.service' > /etc/systemd/system-preset/00-pcsd.preset
+RUN systemctl enable pcsd
 
 ADD *.sh /root/
 ADD k8sDeployment /usr/lib/ocf/resource.d/pacemaker
