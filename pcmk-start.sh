@@ -23,6 +23,7 @@ COROSYNC_CONF=/etc/corosync/corosync.conf
 
 : ${SECRETS_DIR="/etc/secret-volume"}
 : ${AUTHKEY_PATH="${SECRETS_DIR}/authkey"}
+TOKEN=$(cat $AUTHKEY_PATH | base64 | tr -d '\n')
 
 # NODE_ID=$(echo ${HOSTNAME} | sed s/.*-//)
 # NODE_IP=$(grep ${HOSTNAME} /etc/hosts | cut -f1)
@@ -42,9 +43,9 @@ COROSYNC_CONF=/etc/corosync/corosync.conf
 	# pcs cluster setup --local --name ${CLUSTER_NAME} ${NODE_IP} 
     #
     # else
-    pcs host auth --token "$(cat $AUTHKEY_PATH)" $NODE1NAME addr=$NODE1ADDR $NODE2NAME addr=$NODE2ADDR
-    pcs host accept_token "$(cat $AUTHKEY_PATH)"
-    pcs cluster setup --corosync_conf $COROSYNC_CONF --force $CLUSTER_NAME $NODE1NAME $NODE2NAME
+    pcs host auth --token "$TOKEN" $NODE1NAME addr=$NODE1ADDR $NODE2NAME addr=$NODE2ADDR
+    pcs host accept_token "$TOKEN"
+    pcs cluster setup --corosync_conf $COROSYNC_CONF --overwrite --force $CLUSTER_NAME $NODE1NAME $NODE2NAME
 	# pcs cluster auth ${BOOTSTRAP_NODE} ${NODE_IP} -u hacluster -p ${CLUSTER_PASS} --force
 	# if [ "x$(pcs cluster corosync ${BOOTSTRAP_NODE} | grep $NODE_IP)" = x ]; then
 	#     pcs --debug --force cluster node add ${NODE_IP} --bootstrap-from ${BOOTSTRAP_NODE}
