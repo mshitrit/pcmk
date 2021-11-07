@@ -5,7 +5,7 @@ USER root
 # LABEL maintainer="abeekhof@redhat.com"
 
 # RUN dnf search kubernetes
-RUN dnf install -y which passwd findutils bind-utils kubernetes-client gettext fence-agents-virsh fence-virt fence-agents-redfish iputils initscripts chkconfig nmap openssh-clients && rm -rf /var/cache/yum
+RUN dnf install -y which passwd findutils bind-utils kubernetes-client gettext fence-agents-all fence-virt iputils initscripts chkconfig nmap openssh-clients && rm -rf /var/cache/yum
 
 RUN mkdir -p /etc/systemd/system-preset/
 
