@@ -26,13 +26,14 @@ EXPOSE 5410/udp
 EXPOSE 5411/udp
 EXPOSE 5412/udp
 
-ADD k8sDeployment /usr/lib/ocf/resource.d/pacemaker
+
 ADD *.rpm /root/
 RUN dnf install -y /root/*.rpm && rm -rf /var/cache/yum
 RUN echo 'enable pcsd.service' > /etc/systemd/system-preset/00-pcsd.preset
 RUN systemctl enable pcsd
 
 ADD *.sh /root/
+ADD k8sDeployment /usr/lib/ocf/resource.d/pacemaker
 
 CMD ["/usr/lib/systemd/systemd", "--system"]
 #ENTRYPOINT /root/loop.sh
